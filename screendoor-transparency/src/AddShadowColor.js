@@ -1,6 +1,6 @@
-import { ShaderChunk } from '//cdn.skypack.dev/three@0.106.0/build/three.module.js';
+import { ShaderChunk } from 'three';
 
-export function initShadowColor() {
+export const initShadowColor = () => {
 
 	ShaderChunk.shadowmap_pars_fragment = /* glsl */`
 
@@ -98,4 +98,4 @@ export function initShadowColor() {
 			`
 		);
 
-}
+};

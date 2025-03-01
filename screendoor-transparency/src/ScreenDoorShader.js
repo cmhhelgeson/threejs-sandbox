@@ -5,9 +5,9 @@ import {
 	NearestFilter,
 	RepeatWrapping,
 	UniformsUtils
-} from '//cdn.skypack.dev/three@0.106.0/build/three.module.js';
+} from 'three';
 
-export function createDitherTexture() {
+export const createDitherTexture = () => {
 
 	const data = new Float32Array( 16 );
 	data[ 0 ] = 0.0 / 16.0;
@@ -41,7 +41,7 @@ export function createDitherTexture() {
 
 	return ditherTex;
 
-}
+};
 
 function cloneShader( shader, uniforms, defines ) {
 
@@ -56,7 +56,7 @@ function cloneShader( shader, uniforms, defines ) {
 
 }
 
-export function DitheredTransparencyShaderMixin( shader ) {
+export const DitheredTransparencyShaderMixin = ( shader ) => {
 
 	const defineKeyword = 'ENABLE_DITHER_TRANSPARENCY';
  	const newShader = cloneShader(
@@ -98,4 +98,4 @@ export function DitheredTransparencyShaderMixin( shader ) {
 
 	return newShader;
 
-}
+};

@@ -33,16 +33,26 @@
 			<a href="http://threejs.org" target="_blank" rel="noopener">three.js</a> - Screen door transparency shader by <a href="http://gkjohnson.github.io" target="_blank" rel="noopener">Garrett Johnson</a>
 		</div>
 
+		<script type="importmap">
+			{
+				"imports": {
+					"three": "https://cdn.jsdelivr.net/npm/three@0.174.0/build/three.module.min.js",
+					"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.174.0/examples/jsm/"
+				}
+			}
+		</script>
+
 		<script type="module">
 
-			import * as THREE from '//cdn.skypack.dev/three@0.106.0/build/three.module.js';
-			import { OrbitControls } from '//cdn.skypack.dev/three@0.106.0/examples/jsm/controls/OrbitControls.js';
+			import * as THREE from 'three';
+			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-			import Stats from '//cdn.skypack.dev/three@0.106.0/examples/jsm/libs/stats.module.js';
+			import Stats from 'three/addons/libs/stats.module.js';
 			import dat from '//cdn.skypack.dev/dat.gui/build/dat.gui.module.js';
 
-			import { createDitherTexture, DitheredTransparencyShaderMixin} from './src/ScreenDoorShader.js'
-			import { initShadowColor } from './src/AddShadowColor.js'
+			import { createDitherTexture, DitheredTransparencyShaderMixin } from './src/ScreenDoorShader.js'
+			import { initShadowColor } from './src/AddShadowColor.js';
+			
 
 			// globals
 			var stats;
@@ -168,14 +178,14 @@
 				scene.add( container );
 
 				ditherTex = createDitherTexture();
-				sphereGeom = new THREE.SphereBufferGeometry(1, 40, 40);
+				sphereGeom = new THREE.SphereGeometry(1, 40, 40);
 
 				const planeMat = new THREE.ShaderMaterial(THREE.ShaderLib.phong);
 				planeMat.uniforms.shadowColorMap = { value: shadowColorTarget.texture };
 				planeMat.lights = true;
 				planeMat.uniforms.map.value = shadowColorTarget.texture;
 
-				const plane = new THREE.Mesh( new THREE.PlaneBufferGeometry(), planeMat );
+				const plane = new THREE.Mesh( new THREE.PlaneGeometry(), planeMat );
 				plane.scale.multiplyScalar( 100 );
 				plane.rotation.x = - Math.PI / 2;
 				plane.position.y = - 20;

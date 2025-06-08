@@ -4,8 +4,12 @@
   "lint": "eslint \"./**/*.js\""
  },
  "devDependencies": {
+  "@types/three": "^0.177.0",
   "eslint": "^7.11.0",
   "eslint-config-mdcs": "^4.2.3",
   "static-server": "^2.2.1"
+ },
+ "dependencies": {
+  "three": "^0.177.0"
  }
 }

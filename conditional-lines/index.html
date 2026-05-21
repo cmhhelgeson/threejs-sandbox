@@ -30,6 +30,8 @@
 		{
 			"imports": {
 				"three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+				"three/tsl": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.tsl.js",
+				"three/webgpu": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.webgpu.js",
 				"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/",
 				"dat.gui": "https://cdn.skypack.dev/dat.gui/build/dat.gui.module.js"
 			}
@@ -58,8 +60,10 @@
 			import { ConditionalEdgesGeometry } from './src/ConditionalEdgesGeometry.js';
 			import { ConditionalEdgesShader } from './src/ConditionalEdgesShader.js';
 			import { ConditionalLineSegmentsGeometry } from './src/Lines2/ConditionalLineSegmentsGeometry.js';
-			import { ConditionalLineMaterial } from './src/Lines2/ConditionalLineMaterial.js';
-			import { ColoredShadowMaterial } from './src/ColoredShadowMaterial.js';
+			import { ConditionalLineMaterial, ConditionalLineNodeMaterial } from './src/Lines2/ConditionalLineMaterial.js';
+			import { ColoredShadowMaterial, ColoredShadowNodeMaterial } from './src/ColoredShadowMaterial.js';
+
+			import { WebGLNodesHandler } from 'three/addons/tsl/WebGLNodesHandler.js';
 
 
 			// globals
@@ -242,7 +246,7 @@
 
 					if ( c.isMesh ) {
 
-						c.material = new ColoredShadowMaterial( { color: LIGHT_MODEL, shininess: 1.0 } );
+						c.material = new ColoredShadowNodeMaterial( { color: LIGHT_MODEL, shininess: 1.0 } );
 						c.material.polygonOffset = true;
 						c.material.polygonOffsetFactor = 1;
 						c.material.polygonOffsetUnits = 1;
@@ -438,7 +442,7 @@
 					line.rotation.copy( mesh.rotation );
 
 					const thickLineGeom = new ConditionalLineSegmentsGeometry().fromConditionalEdgesGeometry( lineGeom );
-					const thickLines = new LineSegments2( thickLineGeom, new ConditionalLineMaterial( { color: LIGHT_LINES, linewidth: 2 } ) );
+					const thickLines = new LineSegments2( thickLineGeom, new ConditionalLineNodeMaterial( { color: LIGHT_LINES, linewidth: 2 } ) );
 					thickLines.position.copy( mesh.position );
 					thickLines.scale.copy( mesh.scale );
 					thickLines.rotation.copy( mesh.rotation );
@@ -462,6 +466,7 @@
 				scene.add( camera );
 
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
+				renderer.setNodesHandler( new WebGLNodesHandler() );
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );
 				renderer.shadowMap.enabled = true;
@@ -633,7 +638,15 @@
 						if ( c.material ) {
 
 							c.visible = c instanceof LineSegments2 ? params.useThickLines : ! params.useThickLines;
-							c.material.uniforms.diffuse.value.set( linesColor );
+							if ( c.material.isConditionalLineNodeMaterial ) {
+
+								c.material.color.set( linesColor );
+
+							} else {
+
+								c.material.uniforms.diffuse.value.set( linesColor );
+
+							}
 
 						}
 
@@ -692,7 +705,7 @@
 							c.material.transparent = params.opacity !== 1.0;
 							c.material.opacity = params.opacity;
 							c.material.color.set( modelColor );
-							c.material.shadowColor.set( shadowColor );
+							c.material.shadowColor = shadowColor;
 
 						}
 

@@ -4,6 +4,9 @@ import {
 	UniformsUtils,
 	Vector2
 } from 'three';
+
+import { Line2NodeMaterial } from 'three/webgpu';
+import { attribute, cameraProjectionMatrix, modelViewMatrix, sign, Fn, vec2, vec4 } from 'three/tsl';
 /**
  * parameters = {
  *  color: <hex>,
@@ -15,6 +18,76 @@ import {
  *  resolution: <Vector2>, // to be set by renderer
  * }
  */
+
+
+export class ConditionalLineNodeMaterial extends Line2NodeMaterial {
+
+	static get type() {
+
+		return 'ConditionalLineNodeMaterial';
+
+	}
+
+	constructor( parameters = {} ) {
+
+		super( parameters );
+		this.isConditionalLineNodeMaterial = true;
+
+	}
+
+	setup( builder ) {
+
+		super.setup( builder );
+
+		const baseVertex = this.vertexNode;
+
+		const control0 = attribute( 'control0', 'vec3' );
+		const control1 = attribute( 'control1', 'vec3' );
+		const direction = attribute( 'direction', 'vec3' );
+		const instanceStart = attribute( 'instanceStart', 'vec3' );
+
+		this.vertexNode = Fn( () => {
+
+			// Evaluate Line2's full vertex computation first and cache in a variable.
+			// This ensures Line2's varyings and clip position are computed before the
+			// conditional check runs (matching the original shader's ordering).
+			const clipPos = baseVertex.toVar();
+
+			const mvp = cameraProjectionMatrix.mul( modelViewMatrix );
+
+			// Transform the segment endpoints and control points into clip space
+			const c0 = mvp.mul( vec4( control0, 1 ) ).toVar();
+			const c1 = mvp.mul( vec4( control1, 1 ) ).toVar();
+			const p0 = mvp.mul( vec4( instanceStart, 1 ) ).toVar();
+			const p1 = mvp.mul( vec4( instanceStart.add( direction ), 1 ) ).toVar();
+
+			// Full division on c0 so it can serve as a degenerate discard position (w → 1)
+			c0.divAssign( c0.w );
+			c1.xy.divAssign( c1.w );
+			p0.xy.divAssign( p0.w );
+			p1.xy.divAssign( p1.w );
+
+			// Segment direction and its perpendicular normal in NDC
+			const segDir = p1.xy.sub( p0.xy );
+			const norm = vec2( segDir.y.negate(), segDir.x );
+
+			// Directions from the segment endpoint to each control point
+			const c0dir = c0.xy.sub( p1.xy );
+			const c1dir = c1.xy.sub( p1.xy );
+
+			const d0 = norm.normalize().dot( c0dir.normalize() );
+			const d1 = norm.normalize().dot( c1dir.normalize() );
+
+			// When signs differ the controls are on opposite sides of the segment —
+			// collapse all quad vertices to c0's NDC position (w=1) so the degenerate
+			// triangle produces no fragments. When signs match the line is visible.
+			return sign( d0 ).notEqual( sign( d1 ) ).select( c0, clipPos );
+
+		} )();
+
+	}
+
+}
 
 const uniforms = {
 

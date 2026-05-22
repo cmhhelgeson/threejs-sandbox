@@ -15,7 +15,7 @@ export class TransformUtils {
 	// Transforms Matrix4s between frames
 	static transformFrame( fromFrame, toFrame, mat, outputMat ) {
 
-		tempMat.getInverse( toFrame );
+		tempMat.copy( toFrame ).invert();
 
 		outputMat.copy( mat );
 
@@ -27,7 +27,7 @@ export class TransformUtils {
 	// Transforms a Vector3 as a point between frames
 	static transformPoint( fromFrame, toFrame, pos, outputVec ) {
 
-		tempMat.getInverse( toFrame );
+		tempMat.copy( toFrame ).invert();
 
 		outputVec.copy( pos );
 		outputVec.applyMatrix4( fromFrame );
@@ -38,7 +38,7 @@ export class TransformUtils {
 	// Transforms a Vector3 as a direction between frames
 	static transformDirection( fromFrame, toFrame, dir, outputVec ) {
 
-		tempMat.getInverse( toFrame );
+		tempMat.copy( toFrame ).invert();
 
 		tempVec4.copy( dir );
 		tempVec4.w = 0;
@@ -54,7 +54,7 @@ export class TransformUtils {
 
 		fromFrame.decompose( tempPos, tempQuat, tempSca );
 		toFrame.decompose( tempPos, tempQuat2, tempSca );
-		tempQuat2.inverse();
+		tempQuat2.invert();
 
 		outputQuat.copy( quat );
 

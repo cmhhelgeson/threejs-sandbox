@@ -1,4 +1,4 @@
-import { Vector2 } from '//cdn.skypack.dev/three@0.114.0/build/three.module.js';
+import { Vector2 } from 'three';
 import { sampleFunctions } from './src/mipSampleFunctions.js';
 
 export const mipBiasShader = {

@@ -26,6 +26,15 @@
 				width: 100%;
 			}
 		</style>
+	<script type="importmap">
+		{
+			"imports": {
+				"three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+				"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/",
+				"dat.gui": "https://cdn.skypack.dev/dat.gui/build/dat.gui.module.js"
+			}
+		}
+	</script>
 	</head>
 	<body>
 
@@ -44,11 +53,10 @@
 
 		<script type="module">
 
-			import * as THREE from '//cdn.skypack.dev/three@0.130.1/build/three.module.js';
-			import { OrbitControls } from '//cdn.skypack.dev/three@0.130.1/examples/jsm/controls/OrbitControls.js';
-
-			import Stats from '//cdn.skypack.dev/three@0.130.1/examples/jsm/libs/stats.module.js';
-			import dat from '//cdn.skypack.dev/dat.gui/build/dat.gui.module.js';
+			import * as THREE from 'three';
+			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+			import Stats from 'three/addons/libs/stats.module.js';
+			import dat from 'dat.gui';
 
 			import { PackedMipMapGenerator } from './src/PackedMipMapGenerator.js';
 			import { mipBiasShader, customSampleShader } from './shaders.js';
@@ -78,21 +86,21 @@
 				scene.background = new THREE.Color( 0x0d0912 );
 
 				const offset = .55;
-				plane = new THREE.Mesh( new THREE.PlaneBufferGeometry() );
+				plane = new THREE.Mesh( new THREE.PlaneGeometry() );
 				plane.position.y = - offset;
 				plane.position.x = - offset;
 				plane.material = new THREE.ShaderMaterial( mipBiasShader );
 				plane.material.side = THREE.DoubleSide;
 				scene.add( plane );
 
-				mipPlane = new THREE.Mesh( new THREE.PlaneBufferGeometry() );
+				mipPlane = new THREE.Mesh( new THREE.PlaneGeometry() );
 				mipPlane.position.y = - offset;
 				mipPlane.position.x = offset;
 				mipPlane.material = new THREE.ShaderMaterial( customSampleShader );
 				mipPlane.material.side = THREE.DoubleSide;
 				scene.add( mipPlane );
 
-				fullPlane = new THREE.Mesh( new THREE.PlaneBufferGeometry() );
+				fullPlane = new THREE.Mesh( new THREE.PlaneGeometry() );
 				fullPlane.position.y = offset;
 				fullPlane.scale.x = 1.5;
 				fullPlane.material.side = THREE.DoubleSide;
@@ -109,7 +117,7 @@
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );
 				renderer.shadowMap.enabled = true;
-				renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+				renderer.shadowMap.type = THREE.PCFShadowMap;
 
 				document.body.appendChild( renderer.domElement );
 
@@ -173,7 +181,7 @@
 				const mipMat = mipPlane.material;
 				if ( val ) {
 
-					planeMat.uniforms.map.value.minFilter = THREE.LinearMipMapLinearFilter;
+					planeMat.uniforms.map.value.minFilter = THREE.LinearMipmapLinearFilter;
 					planeMat.uniforms.map.value.needsUpdate = true;
 
 					mipMat.uniforms.map.value = linearTarget.texture;
@@ -183,7 +191,7 @@
 				} else {
 
 
-					planeMat.uniforms.map.value.minFilter = THREE.NearestMipMapNearestFilter;
+					planeMat.uniforms.map.value.minFilter = THREE.NearestMipmapNearestFilter;
 					planeMat.uniforms.map.value.needsUpdate = true;
 
 					mipMat.uniforms.map.value = nearestTarget.texture;
@@ -201,7 +209,7 @@
 
 				// TODO: Add an option to enable or not forced power of two and regenerating this texture
 
-				texture.minFilter = THREE.NearestMipMapNearestFilter;
+				texture.minFilter = THREE.NearestMipmapNearestFilter;
 				texture.generateMipMaps = true;
 
 				// const b = 255;

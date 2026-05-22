@@ -40,8 +40,8 @@
 		<script type="importmap">
 			{
 				"imports": {
-					"three": "https://cdn.jsdelivr.net/npm/three@0.174.0/build/three.module.min.js",
-					"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.174.0/examples/jsm/"
+					"three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.min.js",
+					"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/"
 				}
 			}
 		</script>
@@ -110,7 +110,7 @@
 				} );
 
 				var textureLoader = new THREE.TextureLoader();
-				textureLoader.load( 'https://rawgit.com/mrdoob/three.js/r94/examples/textures/floors/FloorsCheckerboard_S_Diffuse.jpg', function ( map ) {
+				textureLoader.load( 'https://raw.githubusercontent.com/mrdoob/three.js/r184/examples/textures/floors/FloorsCheckerboard_S_Diffuse.jpg', function ( map ) {
 
 					map.wrapS = THREE.RepeatWrapping;
 					map.wrapT = THREE.RepeatWrapping;
@@ -122,7 +122,7 @@
 
 				} );
 
-				textureLoader.load( 'https://rawgit.com/mrdoob/three.js/r94/examples/textures/floors/FloorsCheckerboard_S_Normal.jpg', function ( map ) {
+				textureLoader.load( 'https://raw.githubusercontent.com/mrdoob/three.js/r184/examples/textures/floors/FloorsCheckerboard_S_Normal.jpg', function ( map ) {
 
 					map.wrapS = THREE.RepeatWrapping;
 					map.wrapT = THREE.RepeatWrapping;
@@ -151,7 +151,7 @@
 
 				// load samba dancer
 				var loader = new FBXLoader();
-				loader.load( 'https://rawgit.com/mrdoob/three.js/r106/examples/models/fbx/Samba%20Dancing.fbx', res => {
+				loader.load( 'https://raw.githubusercontent.com/mrdoob/three.js/r184/examples/models/fbx/Samba%20Dancing.fbx', res => {
 
 					scene.add( res );
 					res.scale.multiplyScalar( 0.05 );

@@ -50,6 +50,15 @@
 				padding: 20px;
 			}
 		</style>
+	<script type="importmap">
+		{
+			"imports": {
+				"three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+				"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/",
+				"dat.gui": "https://cdn.skypack.dev/dat.gui/build/dat.gui.module.js"
+			}
+		}
+	</script>
 	</head>
 	<body>
 
@@ -73,10 +82,10 @@
 
 		<script type="module">
 
-			import * as THREE from '//cdn.skypack.dev/three@0.130.1/build/three.module.js';
-			import { OrbitControls } from '//cdn.skypack.dev/three@0.130.1/examples/jsm/controls/OrbitControls.js';
+			import * as THREE from 'three';
+			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 			import { getBasisTransform, axesToAsciiImage, stringToAxes } from './src/index.js';
-			import dat from '//cdn.skypack.dev/dat.gui/build/dat.gui.module.js';
+			import dat from 'dat.gui';
 
 			var scene, renderer, camera, controls;
 			var axes1, axes2;
@@ -137,7 +146,6 @@
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );
 				renderer.setClearColor( 0x181f23 );
-				renderer.outputEncoding = THREE.sRGBEncoding;
 				document.body.appendChild( renderer.domElement );
 
 				camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 2000 );
@@ -171,7 +179,7 @@
 				ghostPoints = [];
 				data1 = new Array( 3 ).fill().map( () => {
 
-					const sphere = new THREE.Mesh( new THREE.SphereBufferGeometry( 0.025, 20, 20 ) );
+					const sphere = new THREE.Mesh( new THREE.SphereGeometry( 0.025, 20, 20 ) );
 					axes1.add( sphere );
 
 					const ghostSphere = sphere.clone();

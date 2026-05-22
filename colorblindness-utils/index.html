@@ -26,6 +26,15 @@
 				width: 100%;
 			}
 		</style>
+	<script type="importmap">
+		{
+			"imports": {
+				"three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+				"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/",
+				"dat.gui": "https://cdn.skypack.dev/dat.gui/build/dat.gui.module.js"
+			}
+		}
+	</script>
 	</head>
 	<body>
 
@@ -38,16 +47,13 @@
 
 		<script type="module">
 
-			import * as THREE from '//cdn.skypack.dev/three@0.130.1/build/three.module.js';
-			import { OrbitControls } from '//cdn.skypack.dev/three@0.130.1/examples/jsm/controls/OrbitControls.js';
-			import { CopyShader } from '//cdn.skypack.dev/three@0.130.1/examples/jsm/shaders/CopyShader.js';
-			import { EffectComposer } from '//cdn.skypack.dev/three@0.130.1/examples/jsm/postprocessing/EffectComposer.js';
-			import { RenderPass } from '//cdn.skypack.dev/three@0.130.1/examples/jsm/postprocessing/RenderPass.js';
-			import { ShaderPass } from '//cdn.skypack.dev/three@0.130.1/examples/jsm/postprocessing/ShaderPass.js';
-			import { GammaCorrectionShader } from '//cdn.skypack.dev/three@0.130.1/examples/jsm/shaders/GammaCorrectionShader.js';
-
-			import Stats from '//cdn.skypack.dev/three@0.130.1/examples/jsm/libs/stats.module.js';
-			import dat from '//cdn.skypack.dev/dat.gui/build/dat.gui.module.js';
+			import * as THREE from 'three';
+			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+			import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+			import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+			import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
+			import { GammaCorrectionShader } from 'three/addons/shaders/GammaCorrectionShader.js';
+			import dat from 'dat.gui';
 
 			import { ColorBlindShader } from './src/ColorBlindShader.js'
 			import { ColorBlindColor } from './src/ColorBlindColor.js'
@@ -72,7 +78,7 @@
 				camera.position.set( 0.0, 5, 5 * 3.5 );
 
 				scene = new THREE.Scene();
-				scene.background = new THREE.Color( 0x263238 ).convertGammaToLinear();
+				scene.background = new THREE.Color( 0x263238 );
 
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
 				renderer.setPixelRatio( window.devicePixelRatio );
@@ -84,14 +90,14 @@
 				var textureLoader = new THREE.TextureLoader();
 				textureLoader.load( './images/pencils.jpg', function ( map ) {
 
-					map.encoding = THREE.sRGBEncoding;
+					map.colorSpace = THREE.SRGBColorSpace;
 					material.map = map;
 					material.needsUpdate = true;
 
 				} );
 
 				var mesh = new THREE.Mesh(
-					new THREE.PlaneBufferGeometry(),
+					new THREE.PlaneGeometry(),
 					material
 				);
 				mesh.scale.set(5 * 1.5, 5, 5);

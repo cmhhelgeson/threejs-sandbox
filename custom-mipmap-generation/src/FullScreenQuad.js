@@ -1,4 +1,4 @@
-import { OrthographicCamera, PlaneBufferGeometry, Mesh } from '//cdn.skypack.dev/three@0.130.1/build/three.module.js';
+import { OrthographicCamera, PlaneGeometry, Mesh } from 'three';
 
 export class FullScreenQuad {
 
@@ -23,7 +23,7 @@ export class FullScreenQuad {
 	constructor( material ) {
 
 		const camera = new OrthographicCamera( - 1, 1, 1, - 1, 0, 1 );
-		const geometry = new PlaneBufferGeometry( 2, 2 );
+		const geometry = new PlaneGeometry( 2, 2 );
 
 		this._mesh = new Mesh( geometry, material );
 		this._camera = camera;

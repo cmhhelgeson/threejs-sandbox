@@ -1,6 +1,6 @@
 
 import { FullScreenQuad } from './FullScreenQuad.js';
-import { Color, ShaderMaterial, MathUtils, WebGLRenderTarget, NearestFilter } from 'three';
+import { Color, ShaderMaterial, MathUtils, WebGLRenderTarget, NearestFilter, LinearSRGBColorSpace } from 'three';
 import { CopyShader } from 'three/addons/shaders/CopyShader.js';
 import { clone, MipGenerationShader } from './MipGenerationShader.js';
 
@@ -68,7 +68,9 @@ export class PackedMipMapGenerator {
 		const originalAutoClear = renderer.autoClear;
 		const originalClearAlpha = renderer.getClearAlpha();
 		const originalRenderTarget = renderer.getRenderTarget();
+		const originalOutputColorSpace = renderer.outputColorSpace;
 		renderer.getClearColor( _originalClearColor );
+		renderer.outputColorSpace = LinearSRGBColorSpace;
 
 		const copyQuad = this._copyQuad;
 		const mipQuad = this._mipQuad;
@@ -102,7 +104,7 @@ export class PackedMipMapGenerator {
 			swapTarget.copy( target );
 
 			// mrdoob/three.js issue #20328
-			swapTarget.texture.image = { ...swapTarget.texture.image };
+			//swapTarget.texture.image = { ...swapTarget.texture.image };
 
 		} else {
 
@@ -121,6 +123,7 @@ export class PackedMipMapGenerator {
 
 		renderer.setRenderTarget( target );
 		renderer.clear();
+
 		copyQuad.render( renderer );
 
 		renderer.setRenderTarget( swapTarget );
@@ -173,6 +176,7 @@ export class PackedMipMapGenerator {
 		renderer.setClearAlpha( originalClearAlpha );
 		renderer.setClearColor( _originalClearColor );
 		renderer.autoClear = originalAutoClear;
+		renderer.outputColorSpace = originalOutputColorSpace;
 
 		return mip + 1;
 

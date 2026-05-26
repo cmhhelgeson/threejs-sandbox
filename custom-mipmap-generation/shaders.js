@@ -38,6 +38,7 @@ export const mipBiasShader = {
 			// for some reason when 0 is based into this function an interpolated
 			// mipmap is used so force it to use a minimum of 0.01
 			gl_FragColor = texture2DLodEXT( map, vUv, max( level, 0.01 ) );
+			#include <colorspace_fragment>
 
 		}
 	`
@@ -84,6 +85,8 @@ export const customSampleShader = {
 			gl_FragColor = packedTexture2DLOD( map, vUv, level, originalSize );
 
 			#endif
+
+			#include <colorspace_fragment>
 
 		}
 	`

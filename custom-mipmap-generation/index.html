@@ -29,8 +29,8 @@
 	<script type="importmap">
 		{
 			"imports": {
-				"three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
-				"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/",
+				"three": "https://cdn.jsdelivr.net/npm/three@0.154.0/build/three.module.js",
+				"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.154.0/examples/jsm/",
 				"dat.gui": "https://cdn.skypack.dev/dat.gui/build/dat.gui.module.js"
 			}
 		}
@@ -109,6 +109,7 @@
 				new THREE.TextureLoader().load('./images/voyager-record-cover.jpg', texture => {
 
 					ogTexture = texture;
+					ogTexture.colorSpace = THREE.SRGBColorSpace;
 					updateTexture();
 
 				} );
@@ -212,45 +213,12 @@
 				texture.minFilter = THREE.NearestMipmapNearestFilter;
 				texture.generateMipMaps = true;
 
-				// const b = 255;
-				// texture = new THREE.DataTexture(
-				// 	new Uint8Array([
-				// 		b, 0, 0, 0, b, 0, 0, 0, b, b, b, b,
-				// 		0, 0, 0, b, 0, 0, b, b, 0, 0, b, 0,
-				// 		b, b, b, b, 0, b, b, b, 0, 0, b, b,
-				// 		0, 0, 0, b, b, 0, 0, b, b, b, 0, 0
-				// 	]),
-				// 	4, 4, THREE.RGBFormat
-				// );
-				// texture.minFilter = THREE.NearestFilter;
-
-				// const w = 43;
-				// const h = 17;
-				// const b = 255;
-				// texture = new THREE.DataTexture(
-				// 	new Uint8Array( w * h * 3 ),
-				// 	w, h, THREE.RGBFormat
-				// );
-				// texture.minFilter = THREE.NearestFilter;
-
-				// for ( let x = 0; x < w; x ++ ) {
-
-				// 	for ( let y = 0; y < h; y ++ ) {
-
-				// 		const offset = x % 2 === 0.0 ? 1 : 0;
-				// 		const index = ( y * w + x ) * 3;
-				// 		texture.image.data[ index + offset ] = x / w * 255;
-				// 		texture.image.data[ index + 2 ] = y % 2 == 0 ?  255 : 0;
-
-				// 	}
-
-				// }
-
 				plane.material.uniforms.map.value = texture;
 
 				if ( ! linearTarget ) {
 
 					linearTarget = new THREE.WebGLRenderTarget();
+
 					nearestTarget = new THREE.WebGLRenderTarget();
 					nearestTarget.texture.minFilter = THREE.NearestFilter;
 					nearestTarget.texture.magFilter = THREE.NearestFilter;
@@ -296,6 +264,7 @@
 				mipPlane.material.needsUpdate = true;
 
 				plane.material.uniforms.map.value = texture;
+				console.log(texture)
 
 			}
 

@@ -118,11 +118,12 @@
 				instanceMesh = new THREE.Mesh(instancedGeometry, instanceMat);
 				scene.add(instanceMesh);
 
-				var dirLight = new THREE.DirectionalLight();
+				var dirLight = new THREE.DirectionalLight(0xffffff, Math.PI);
 				dirLight.position.set(1, 2, 3);
 				scene.add(dirLight);
 
-				var ambientLight = new THREE.AmbientLight(0xffffff);
+				var ambientLight = new THREE.AmbientLight(0xffffff, Math.PI);
+				console.log(ambientLight.intensity);
 				scene.add(ambientLight);
 
 				// camera controls
